@@ -1,0 +1,215 @@
+local SoundService = game:GetService("SoundService")
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+-- Create the skybox
+imageOne = "http://www.roblox.com/asset/?id=92138134071178"
+imageTwo = "http://www.roblox.com/asset/?id=78884968999208"
+imageThree = "http://www.roblox.com/asset/?id=101734080983039"
+imageFour = "http://www.roblox.com/asset/?id=137967545555965"
+imageFive = "http://www.roblox.com/asset/?id=136812087100327"
+imageSix = "http://www.roblox.com/asset/?id=77400561668171"
+imageSeven = "http://www.roblox.com/asset/?id=108226360166270"
+imageEight = "http://www.roblox.com/asset/?id=1778180"
+
+Spooky = Instance.new("Sound", workspace)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://1837258874"
+Spooky.Volume = 15
+Spooky.Pitch = 0.8
+Spooky.Looped = true
+Spooky:Play()
+
+Sky = Instance.new("Sky", game.Lighting)
+Sky.SkyboxBk = imageOne
+Sky.SkyboxDn = imageOne
+Sky.SkyboxFt = imageOne
+Sky.SkyboxLf = imageOne
+Sky.SkyboxRt = imageOne
+Sky.SkyboxUp = imageOne
+
+
+while true do
+	Sky.SkyboxBk = imageOne
+	Sky.SkyboxDn = imageOne
+	Sky.SkyboxFt = imageOne
+	Sky.SkyboxLf = imageOne
+	Sky.SkyboxRt = imageOne
+	Sky.SkyboxUp = imageOne
+	wait(0.15)
+	Sky.SkyboxBk = imageTwo
+	Sky.SkyboxDn = imageTwo
+	Sky.SkyboxFt = imageTwo
+	Sky.SkyboxLf = imageTwo
+	Sky.SkyboxRt = imageTwo
+	Sky.SkyboxUp = imageTwo
+	wait(0.15)
+	Sky.SkyboxBk = imageThree
+	Sky.SkyboxDn = imageThree
+	Sky.SkyboxFt = imageThree
+	Sky.SkyboxLf = imageThree
+	Sky.SkyboxRt = imageThree
+	Sky.SkyboxUp = imageThree
+	wait(0.15)
+	Sky.SkyboxBk = imageFour
+	Sky.SkyboxDn = imageFour
+	Sky.SkyboxFt = imageFour
+	Sky.SkyboxLf = imageFour
+	Sky.SkyboxRt = imageFour
+	Sky.SkyboxUp = imageFour
+	wait(0.15)
+	Sky.SkyboxBk = imageFive
+	Sky.SkyboxDn = imageFive
+	Sky.SkyboxFt = imageFive
+	Sky.SkyboxLf = imageFive
+	Sky.SkyboxRt = imageFive
+	Sky.SkyboxUp = imageFive
+	wait(0.15)
+	Sky.SkyboxBk = imageSix
+	Sky.SkyboxDn = imageSix
+	Sky.SkyboxFt = imageSix
+	Sky.SkyboxLf = imageSix
+	Sky.SkyboxRt = imageSix
+	Sky.SkyboxUp = imageSix
+	wait(0.15)
+	Sky.SkyboxBk = imageSeven
+	Sky.SkyboxDn = imageSeven
+	Sky.SkyboxFt = imageSeven
+	Sky.SkyboxLf = imageSeven
+	Sky.SkyboxRt = imageSeven
+	Sky.SkyboxUp = imageSeven
+	wait(0.15)
+	Sky.SkyboxBk = imageEight
+	Sky.SkyboxDn = imageEight
+	Sky.SkyboxFt = imageEight
+	Sky.SkyboxLf = imageEight
+	Sky.SkyboxRt = imageEight
+	Sky.SkyboxUp = imageEight
+	wait(0.15)
+
+
+	
+	
+
+	-- Create on-screen message for all players
+	local function showMessage(player)
+		local screenGui = Instance.new("ScreenGui")
+		screenGui.Name = "WelcomeMessage"
+		screenGui.ResetOnSpawn = false
+		screenGui.Parent = player:WaitForChild("PlayerGui")
+
+		local textLabel = Instance.new("TextLabel")
+		textLabel.Name = "MessageLabel"
+		textLabel.Size = UDim2.new(0.5, 0, 0.15, 0)
+		textLabel.Position = UDim2.new(0.25, 0, 0.4, 0)
+		textLabel.BackgroundTransparency = 0.3
+		textLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+		textLabel.TextColor3 = Color3.new(1, 1, 1)
+		textLabel.TextScaled = true
+		textLabel.Font = Enum.Font.GothamBold
+		textLabel.Text = "FE BYPASS" -- Edit this message
+		textLabel.Parent = screenGui
+
+		-- Remove message after 5 seconds
+		task.delay(5, function()
+			screenGui:Destroy()
+		end)
+	end
+
+	-- Show message to new players
+	Players.PlayerAdded:Connect(showMessage)
+
+	-- Show message to players already in the game
+	for _, player in Players:GetPlayers() do
+		showMessage(player)
+	end
+	
+	
+
+end
+local ReplicationService = {}
+ReplicationService.__index = ReplicationService
+
+-- DEFINITIONS --
+
+local runservice = game:GetService("RunService")
+local core = script:WaitForChild("CORE")
+
+local runtime_folder = core:WaitForChild("ReplicationRuntime")
+local security_libraries = core:WaitForChild("SecurityLibraries")
+
+if runservice:IsClient() then
+	error("Replication management can only be handled by game server")
+end
+
+-- SERVER FUNCTIONS --
+
+function ReplicationService:ReplicatePropertyFromClient(instance: "instance", property: "string", player: "instance")
+	local replicator = core:WaitForChild("Replication"):Clone()
+	replicator.Parent = runtime_folder
+	replicator.Instance.Value = instance
+	replicator.Player.Value = player
+	replicator.Property.Value = property
+	replicator.Secure.Value = false
+	replicator.CoreFolder.Value = core
+
+	return require(replicator) --require(core:WaitForChild("Replication"))
+end
+
+function ReplicationService:ReplicatePropertyFromClientWithSecurity(instance: "instance", property: "string", player: "instance", securitylibrary: "string")	
+	local replicator = core:WaitForChild("Replication"):Clone()
+	replicator.Parent = runtime_folder
+	replicator.Instance.Value = instance
+	replicator.Player.Value = player
+	replicator.Property.Value = property
+	replicator.Secure.Value = true
+	replicator.SecurityLibrary.Value = security_libraries:FindFirstChild(securitylibrary)
+	replicator.CoreFolder.Value = core
+
+	return require(replicator) --require(core:WaitForChild("Replication"))
+end
+
+function ReplicationService:GetAllReplicatorsOnInstance(instance: "instance")
+	local replicators = {}
+	for i, v in runtime_folder:GetChildren() do
+		if v.Instance.Value == instance then
+			table.insert(replicators, require(v))
+		end
+	end
+	return replicators
+end
+
+function ReplicationService:GetAllReplicatorsFromPlayer(player: "instance")
+	local replicators = {}
+	for i, v in runtime_folder:GetChildren() do
+		if v.Player.Value == player then
+			table.insert(replicators, require(v))
+		end
+	end
+	return replicators
+end
+
+function ReplicationService:GetAllReplicators()
+	local replicators = {}
+	for i, v in runtime_folder:GetChildren() do
+		table.insert(replicators, require(v))
+	end
+	return replicators
+end
+
+function ReplicationService:AddSecurityLibrary(securitylibrary: "instance")
+	if securitylibrary ~= nil and securitylibrary:IsA("ModuleScript") then
+		local newlibrary = securitylibrary:Clone()
+		newlibrary.Parent = security_libraries
+	end
+end
+
+function ReplicationService:RemoveSecurityLibrary(securitylibrary: "string")
+	if security_libraries:FindFirstChild(securitylibrary) then
+		security_libraries:FindFirstChild(securitylibrary):Destroy()
+	end
+end
+
+
+return ReplicationService
